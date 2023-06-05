@@ -17,6 +17,8 @@ public partial class Player
 
         protected override void OnUpdate()
         {
+            Player player = StateMachine.Owner;
+            player._rigidbody.AddForce(new Vector3(10, 0, 0));
             Debug.Log("WalkState: Update");
         }
     }

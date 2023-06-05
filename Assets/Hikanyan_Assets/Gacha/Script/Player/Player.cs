@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public partial class Player : MonoBehaviour
 {
     private StateMachine<Player> _stateMachine;
+    private InputAction _movementAction;
 
+    private Rigidbody _rigidbody;
     enum Event : int
     {
         Idle,
         Walk,
         Jump,
     }
+
     private void Start()
     {
+        TryGetComponent(out _rigidbody);
         _stateMachine = new StateMachine<Player>(this);
         Initialize();
     }
@@ -32,12 +36,19 @@ public partial class Player : MonoBehaviour
 
         // 初期ステートの設定
         _stateMachine.Start(idleState);
+        
+        // InputSystemの設定
+        _movementAction = new InputAction("Move", InputActionType.Button, "<Keyboard>/space");
+        _movementAction.performed += OnMovementPerformed;
+        _movementAction.Enable();
     }
 
     private void Update()
     {
         // ステートの更新
         _stateMachine.Update();
+        
+        
     }
 
     public void Walk()
@@ -50,5 +61,21 @@ public partial class Player : MonoBehaviour
     {
         // ジャンプイベントの発行
         _stateMachine.Dispatch((int)Event.Jump);
+    }
+    
+    private void OnMovementPerformed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            // 移動アクションの処理
+            Walk();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // InputSystemのイベントハンドラの解除
+        _movementAction.performed -= OnMovementPerformed;
+        _movementAction.Disable();
     }
 }
