@@ -10,19 +10,16 @@ namespace Hikanyan.Runner.Player
         /// <summary>
         /// 現在のステート
         /// </summary>
-        private PlayerStateBase _currentState;
+        private PlayerStateBase _currentState =_stateStanding;
 
-        void Awake()
-        {
-            
-        }
-
-        void Start()
+        
+        
+        void OnStart()
         {
             _currentState.OnEnter(this,null);
         }
 
-        void Update()
+        void OnUpdate()
         {
             _currentState.OnUpdate(this);
         }
