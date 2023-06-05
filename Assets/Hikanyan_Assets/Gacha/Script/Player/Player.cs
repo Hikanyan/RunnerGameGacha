@@ -1,41 +1,81 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace Hikanyan.Runner.Player
+public partial class Player : MonoBehaviour
 {
-    public partial class Player :MonoBehaviour
+    private StateMachine<Player> _stateMachine;
+    private InputAction _movementAction;
+
+    private Rigidbody _rigidbody;
+    enum Event : int
     {
-        private static readonly StateStanding _stateStanding = new StateStanding();
-        private static readonly StateJumping _stateJumping = new StateJumping();
-        /// <summary>
-        /// 現在のステート
-        /// </summary>
-        private PlayerStateBase _currentState;
+        Idle,
+        Walk,
+        Jump,
+    }
 
-        void Awake()
-        {
-            
-        }
+    private void Start()
+    {
+        TryGetComponent(out _rigidbody);
+        _stateMachine = new StateMachine<Player>(this);
+        Initialize();
+    }
 
-        void Start()
-        {
-            _currentState.OnEnter(this,null);
-        }
+    private void Initialize()
+    {
+        // ステートの追加
+        var idleState = _stateMachine.Add<IdleState>();
+        var walkState = _stateMachine.Add<WalkState>();
+        var jumpState = _stateMachine.Add<JumpState>();
 
-        void Update()
-        {
-            _currentState.OnUpdate(this);
-        }
+        // 遷移の定義
+        _stateMachine.AddTransition<IdleState, WalkState>((int)Event.Walk);
+        _stateMachine.AddTransition<IdleState, JumpState>((int)Event.Jump);
+        _stateMachine.AddTransition<WalkState, IdleState>((int)Event.Idle);
+        _stateMachine.AddTransition<JumpState, IdleState>((int)Event.Idle);
 
-        void ChangeState(PlayerStateBase nextState)
+        // 初期ステートの設定
+        _stateMachine.Start(idleState);
+        
+        // InputSystemの設定
+        _movementAction = new InputAction("Move", InputActionType.Button, "<Keyboard>/space");
+        _movementAction.performed += OnMovementPerformed;
+        _movementAction.Enable();
+    }
+
+    private void Update()
+    {
+        // ステートの更新
+        _stateMachine.Update();
+        
+        
+    }
+
+    public void Walk()
+    {
+        // 歩くイベントの発行
+        _stateMachine.Dispatch((int)Event.Walk);
+    }
+
+    public void Jump()
+    {
+        // ジャンプイベントの発行
+        _stateMachine.Dispatch((int)Event.Jump);
+    }
+    
+    private void OnMovementPerformed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
-            _currentState.OnExit(this,nextState);
-            nextState.OnExit(this,_currentState);
-            _currentState = nextState;
+            // 移動アクションの処理
+            Walk();
         }
-        void OnCollisionEnter(Collision collision)
-        {
-            ChangeState(_stateStanding);
-        }
+    }
+
+    private void OnDestroy()
+    {
+        // InputSystemのイベントハンドラの解除
+        _movementAction.performed -= OnMovementPerformed;
+        _movementAction.Disable();
     }
 }
