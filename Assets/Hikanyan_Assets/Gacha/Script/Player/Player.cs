@@ -1,38 +1,54 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
-namespace Hikanyan.Runner.Player
+public partial class Player : MonoBehaviour
 {
-    public partial class Player :MonoBehaviour
+    private StateMachine<Player> _stateMachine;
+
+    enum Event : int
     {
-        private static readonly StateStanding _stateStanding = new StateStanding();
-        private static readonly StateJumping _stateJumping = new StateJumping();
-        /// <summary>
-        /// 現在のステート
-        /// </summary>
-        private PlayerStateBase _currentState =_stateStanding;
+        Idle,
+        Walk,
+        Jump,
+    }
+    private void Start()
+    {
+        _stateMachine = new StateMachine<Player>(this);
+        Initialize();
+    }
 
-        
-        
-        void OnStart()
-        {
-            _currentState.OnEnter(this,null);
-        }
+    private void Initialize()
+    {
+        // ステートの追加
+        var idleState = _stateMachine.Add<IdleState>();
+        var walkState = _stateMachine.Add<WalkState>();
+        var jumpState = _stateMachine.Add<JumpState>();
 
-        void OnUpdate()
-        {
-            _currentState.OnUpdate(this);
-        }
+        // 遷移の定義
+        _stateMachine.AddTransition<IdleState, WalkState>((int)Event.Walk);
+        _stateMachine.AddTransition<IdleState, JumpState>((int)Event.Jump);
+        _stateMachine.AddTransition<WalkState, IdleState>((int)Event.Idle);
+        _stateMachine.AddTransition<JumpState, IdleState>((int)Event.Idle);
 
-        void ChangeState(PlayerStateBase nextState)
-        {
-            _currentState.OnExit(this,nextState);
-            nextState.OnExit(this,_currentState);
-            _currentState = nextState;
-        }
-        void OnCollisionEnter(Collision collision)
-        {
-            ChangeState(_stateStanding);
-        }
+        // 初期ステートの設定
+        _stateMachine.Start(idleState);
+    }
+
+    private void Update()
+    {
+        // ステートの更新
+        _stateMachine.Update();
+    }
+
+    public void Walk()
+    {
+        // 歩くイベントの発行
+        _stateMachine.Dispatch((int)Event.Walk);
+    }
+
+    public void Jump()
+    {
+        // ジャンプイベントの発行
+        _stateMachine.Dispatch((int)Event.Jump);
     }
 }
