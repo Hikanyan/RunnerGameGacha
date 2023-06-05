@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public partial class Player : MonoBehaviour
 {
     private StateMachine<Player> _stateMachine;
-    private InputAction _movementAction;
+    private PlayerInput _movementPlayerInputAction;
 
     private Rigidbody _rigidbody;
     enum Event : int
@@ -17,6 +18,8 @@ public partial class Player : MonoBehaviour
     private void Start()
     {
         TryGetComponent(out _rigidbody);
+        // InputSystemの設定
+        TryGetComponent(out _movementPlayerInputAction);
         _stateMachine = new StateMachine<Player>(this);
         Initialize();
     }
@@ -36,11 +39,18 @@ public partial class Player : MonoBehaviour
 
         // 初期ステートの設定
         _stateMachine.Start(idleState);
-        
-        // InputSystemの設定
-        _movementAction = new InputAction("Move", InputActionType.Button, "<Keyboard>/space");
-        _movementAction.performed += OnMovementPerformed;
-        _movementAction.Enable();
+    }
+
+    private void OnEnable()
+    {
+        // InputSystemのイベントハンドラの登録
+        _movementPlayerInputAction.actions["Move"].performed += OnMovementPerformed;
+    }
+
+    private void OnDisable()
+    {
+        // InputSystemのイベントハンドラの解除
+        _movementPlayerInputAction.actions["Move"].performed -= OnMovementPerformed;
     }
 
     private void Update()
@@ -70,12 +80,5 @@ public partial class Player : MonoBehaviour
             // 移動アクションの処理
             Walk();
         }
-    }
-
-    private void OnDestroy()
-    {
-        // InputSystemのイベントハンドラの解除
-        _movementAction.performed -= OnMovementPerformed;
-        _movementAction.Disable();
     }
 }
