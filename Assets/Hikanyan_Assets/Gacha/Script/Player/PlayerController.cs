@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    
     Player _player;
     PlayerInput _input;
 
@@ -25,19 +26,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.actions["Move"].performed += OnMove;
+        _input.actions["Move"].performed += OnMovement;
         _input.actions["Move"].canceled += OnMoveStop;
         _input.actions["Fire"].started += OnFire;
     }
 
     private void OnDisable()
     {
-        _input.actions["Move"].performed -= OnMove;
+        _input.actions["Move"].performed -= OnMovement;
         _input.actions["Move"].canceled -= OnMoveStop;
         _input.actions["Fire"].started -= OnFire;
     }
 
-    void OnMove(InputAction.CallbackContext obj)
+    void OnMovement(InputAction.CallbackContext obj)
     {
         _player.Walk();
         // var value = obj.ReadValue<Vector2>();
