@@ -1,1 +1,34 @@
-{}
+{
+    "name": "MyControls",
+    "maps": [
+        {
+            "name": "Bullet",
+            "id": "1d4184a7-86a7-49e2-9545-289c9f91aad1",
+            "actions": [
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "d29c0048-4a0d-4d52-9e95-8f6706a87022",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "12514206-97e2-43ea-9b46-7be55904393b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
