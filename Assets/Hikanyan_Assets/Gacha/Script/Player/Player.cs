@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+
 
 public partial class Player : MonoBehaviour
 {
     private StateMachine<Player> _stateMachine;
     private PlayerInput _movementPlayerInputAction;
+    
+    private List<InputEvent> _inputBuffer = new List<InputEvent>();
+
 
     private Rigidbody _rigidbody;
     enum Event : int
@@ -14,6 +20,16 @@ public partial class Player : MonoBehaviour
         Walk,
         Jump,
     }
+    struct InputEvent
+    {
+        public Event EventType;
+
+        public InputEvent(Event eventType)
+        {
+            EventType = eventType;
+        }
+    }
+
 
     private void Start()
     {
@@ -57,8 +73,9 @@ public partial class Player : MonoBehaviour
     {
         // ステートの更新
         _stateMachine.Update();
-        
-        
+    
+        // バッファの内容を処理
+        ProcessInputBuffer();
     }
 
     public void Walk()
@@ -72,11 +89,28 @@ public partial class Player : MonoBehaviour
         // ジャンプイベントの発行
         _stateMachine.Dispatch((int)Event.Jump);
     }
+    private void ProcessInputBuffer()
+    {
+        // バッファが空でない場合、各イベントを処理する
+        while (_inputBuffer.Count > 0)
+        {
+            var inputEvent = _inputBuffer[0];
+            _inputBuffer.RemoveAt(0);
+
+            // イベントに対応するアクションを実行
+            _stateMachine.Dispatch((int)inputEvent.EventType);
+        }
+    }
     
     private void OnMovementPerformed(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
+            // 入力イベントをバッファに追加
+            var inputEvent = new InputEvent(Event.Walk);
+            _inputBuffer.Add(inputEvent);
+            // デバッグログでバッファに追加されたことを確認
+            Debug.Log("Input Event Added to Buffer: " + inputEvent.EventType);
             // 移動アクションの処理
             Walk();
         }
