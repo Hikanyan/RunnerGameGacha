@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.Serialization;
 
 
 public partial class Player : MonoBehaviour
 {
     private StateMachine<Player> _stateMachine;
-    private PlayerInput _movementPlayerInputAction;
-    
-    private List<InputEvent> _inputBuffer = new List<InputEvent>();
+    private PlayerInput _playerInput = default;
+    private InputAction _moveAction, _lookAction, _fireAction,_jumpAction;
+    //private List<InputEvent> _inputBuffer = new List<InputEvent>();
 
-
+    [SerializeField] private Transform[] _lanesPos = new Transform[3];
+    private int _laneIndex = 1;
     private Rigidbody _rigidbody;
     enum Event : int
     {
@@ -20,28 +22,29 @@ public partial class Player : MonoBehaviour
         Walk,
         Jump,
     }
-    struct InputEvent
-    {
-        public Event EventType;
-
-        public InputEvent(Event eventType)
-        {
-            EventType = eventType;
-        }
-    }
 
 
     private void Start()
     {
         TryGetComponent(out _rigidbody);
-        // InputSystemの設定
-        TryGetComponent(out _movementPlayerInputAction);
-        _stateMachine = new StateMachine<Player>(this);
+        TryGetComponent(out _playerInput);
+        
         Initialize();
     }
 
     private void Initialize()
     {
+        // InputSystemの設定
+        var actionMap = _playerInput.currentActionMap;
+        //アクションマップからアクションを取得
+        _moveAction = actionMap["Move"];
+        _lookAction = actionMap["Look"];
+        _fireAction = actionMap["Fire"];
+        _jumpAction = actionMap["Jump"];
+
+        _moveAction.started += OnMovementPerformed;
+        //ステートマシンの設定
+        _stateMachine = new StateMachine<Player>(this);
         // ステートの追加
         var idleState = _stateMachine.Add<IdleState>();
         var walkState = _stateMachine.Add<WalkState>();
@@ -56,26 +59,31 @@ public partial class Player : MonoBehaviour
         // 初期ステートの設定
         _stateMachine.Start(idleState);
     }
-
-    private void OnEnable()
-    {
-        // InputSystemのイベントハンドラの登録
-        _movementPlayerInputAction.actions["Move"].performed += OnMovementPerformed;
-    }
-
-    private void OnDisable()
-    {
-        // InputSystemのイベントハンドラの解除
-        _movementPlayerInputAction.actions["Move"].performed -= OnMovementPerformed;
-    }
+    //
+    // private void OnEnable()
+    // {
+    //     // InputSystemのイベントハンドラの登録
+    //     _playerInput.actions["Move"].performed += OnMovementPerformed;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     // InputSystemのイベントハンドラの解除
+    //     _playerInput.actions["Move"].performed -= OnMovementPerformed;
+    // }
 
     private void Update()
     {
         // ステートの更新
         _stateMachine.Update();
     
+        //アクションからコントローラの入力値を取得
+        Vector2 move = _moveAction.ReadValue<Vector2>();
+        Vector2 look = _lookAction.ReadValue<Vector2>();
+        bool fire = _fireAction.triggered;
+
         // バッファの内容を処理
-        ProcessInputBuffer();
+        //ProcessInputBuffer();
     }
 
     public void Walk()
@@ -89,30 +97,22 @@ public partial class Player : MonoBehaviour
         // ジャンプイベントの発行
         _stateMachine.Dispatch((int)Event.Jump);
     }
-    private void ProcessInputBuffer()
-    {
-        // バッファが空でない場合、各イベントを処理する
-        while (_inputBuffer.Count > 0)
-        {
-            var inputEvent = _inputBuffer[0];
-            _inputBuffer.RemoveAt(0);
-
-            // イベントに対応するアクションを実行
-            _stateMachine.Dispatch((int)inputEvent.EventType);
-        }
-    }
+    // private void ProcessInputBuffer()
+    // {
+    //     // バッファが空でない場合、各イベントを処理する
+    //     while (_inputBuffer.Count > 0)
+    //     {
+    //         var inputEvent = _inputBuffer[0];
+    //         _inputBuffer.RemoveAt(0);
+    //
+    //         // イベントに対応するアクションを実行
+    //         _stateMachine.Dispatch((int)inputEvent.EventType);
+    //     }
+    // }
     
     private void OnMovementPerformed(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            // 入力イベントをバッファに追加
-            var inputEvent = new InputEvent(Event.Walk);
-            _inputBuffer.Add(inputEvent);
-            // デバッグログでバッファに追加されたことを確認
-            Debug.Log("Input Event Added to Buffer: " + inputEvent.EventType);
-            // 移動アクションの処理
-            Walk();
-        }
+        // 移動アクションの処理
+        Walk();
     }
 }
