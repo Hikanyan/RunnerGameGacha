@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
-using DG.Tweening;
+using UnityEngine.Serialization;
+
 
 public partial class Player : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public partial class Player : MonoBehaviour
     private InputAction _moveAction, _lookAction, _fireAction,_jumpAction;
     //private List<InputEvent> _inputBuffer = new List<InputEvent>();
 
-
+    [SerializeField] private Transform[] _lanesPos = new Transform[3];
+    private int _laneIndex = 1;
     private Rigidbody _rigidbody;
     enum Event : int
     {
@@ -39,7 +41,8 @@ public partial class Player : MonoBehaviour
         _lookAction = actionMap["Look"];
         _fireAction = actionMap["Fire"];
         _jumpAction = actionMap["Jump"];
-        
+
+        _moveAction.started += OnMovementPerformed;
         //ステートマシンの設定
         _stateMachine = new StateMachine<Player>(this);
         // ステートの追加
@@ -79,8 +82,6 @@ public partial class Player : MonoBehaviour
         Vector2 look = _lookAction.ReadValue<Vector2>();
         bool fire = _fireAction.triggered;
 
-        Debug.Log(string.Format("move:{0} + Look:{1} + Fire:{2}", move, look, fire));
-        
         // バッファの内容を処理
         //ProcessInputBuffer();
     }
@@ -111,10 +112,7 @@ public partial class Player : MonoBehaviour
     
     private void OnMovementPerformed(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            // 移動アクションの処理
-            Walk();
-        }
+        // 移動アクションの処理
+        Walk();
     }
 }

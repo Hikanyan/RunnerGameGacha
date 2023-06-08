@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 using State = StateMachine<Player>.State;
 
 public partial class Player
@@ -18,7 +19,12 @@ public partial class Player
         protected override void OnUpdate()
         {
             Player player = StateMachine.Owner;
-            player._rigidbody.AddForce(new Vector3(10, 0, 0));
+            player._laneIndex += (int)player._moveAction.ReadValue<Vector2>().x;
+
+            if (player._laneIndex < 0) { player._laneIndex = 0; return; }
+            if (player._laneIndex > 2) { player._laneIndex = 2; return; }
+
+            player.transform.DOMoveX(player._lanesPos[player._laneIndex].position.x, 0.2f).SetEase(Ease.Linear).SetAutoKill();
             Debug.Log("WalkState: Update");
         }
     }
