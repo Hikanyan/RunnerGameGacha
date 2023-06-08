@@ -233,7 +233,6 @@ GameObject:
   - component: {fileID: 765823604}
   - component: {fileID: 765823603}
   - component: {fileID: 765823602}
-  - component: {fileID: 765823609}
   - component: {fileID: 765823608}
   - component: {fileID: 765823600}
   - component: {fileID: 765823607}
@@ -268,7 +267,19 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d29c0048-4a0d-4d52-9e95-8f6706a87022
+    m_ActionName: RunGame/Fire[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 49ae3fa8-b29c-4f7d-afd4-8c6d42f11b5a
+    m_ActionName: RunGame/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e7dfffc1-ca1f-4552-8107-61244e20e659
+    m_ActionName: RunGame/Jump[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: RunGame
@@ -381,19 +392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1089a4fc25b747369d1b5dfe68555d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &765823609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765823599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa13b0ddff2d422aafcfef1875f0be01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerSpeed: 500
 --- !u!1 &1344674981
 GameObject:
   m_ObjectHideFlags: 0
