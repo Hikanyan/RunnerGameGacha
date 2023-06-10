@@ -15,8 +15,13 @@ public partial class Player : MonoBehaviour
     [SerializeField] private Transform[] _lanesPos = new Transform[3];
     private int _laneIndex = 1;
     private Rigidbody _rigidbody;
-    private Vector2 move, look;
-    private bool fire;
+    private Vector2 _move, _look;
+    private Vector2 _moveStop, _lookStop;
+    
+    private bool _fire;
+    private bool _isInputEnabled = true;
+    [SerializeField] float _inputDisableTime = 0.5f;
+
     enum Event : int
     {
         Idle,
@@ -27,17 +32,15 @@ public partial class Player : MonoBehaviour
 
     private void Start()
     {
+        _playerInput = new RunGameControllerinputactions();
+        _playerInput.Enable();
         TryGetComponent(out _rigidbody);
-        TryGetComponent(out _playerInput);
-        
         Initialize();
+        Walk();
     }
 
     private void Initialize()
     {
-        // InputSystemの設定currentActionMap
-        _playerInput.Player.Move.started += OnMovementPerformed;
-        
         //ステートマシンの設定
         _stateMachine = new StateMachine<Player>(this);
         // ステートの追加
@@ -73,10 +76,11 @@ public partial class Player : MonoBehaviour
         _stateMachine.Update();
     
         //アクションからコントローラの入力値を取得
-        move = _playerInput.Player.Move.ReadValue<Vector2>();
-        look = _playerInput.Player.Look.ReadValue<Vector2>();
-        fire = _playerInput.Player.Fire.triggered;
+        _move = _playerInput.Player.Move.ReadValue<Vector2>();
+        _look = _playerInput.Player.Look.ReadValue<Vector2>();
+        _fire = _playerInput.Player.Fire.triggered;
 
+        Debug.Log(_move);
         // バッファの内容を処理
         //ProcessInputBuffer();
     }
@@ -104,10 +108,4 @@ public partial class Player : MonoBehaviour
     //         _stateMachine.Dispatch((int)inputEvent.EventType);
     //     }
     // }
-    
-    private void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        // 移動アクションの処理
-        Walk();
-    }
 }

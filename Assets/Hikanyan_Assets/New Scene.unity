@@ -468,6 +468,7 @@ MonoBehaviour:
   - {fileID: 1259132899}
   - {fileID: 1421857371}
   - {fileID: 1777459129}
+  _inputDisableTime: 0.05
 --- !u!1 &1259132898
 GameObject:
   m_ObjectHideFlags: 0
