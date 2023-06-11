@@ -22,6 +22,10 @@ public partial class Player : MonoBehaviour
     private bool _isInputEnabled = true;
     [SerializeField] float _inputDisableTime = 0.5f;
 
+    private int _level;
+    private int _experience;
+    public int Level { get { return _level; } set { _level = value; } }
+    public int Experience { get { return _experience; } set { _experience = value; } }
     enum Event : int
     {
         Idle,
