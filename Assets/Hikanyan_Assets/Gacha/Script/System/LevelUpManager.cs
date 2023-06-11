@@ -24,7 +24,7 @@ public class LevelUpManager : MonoBehaviour
 
         if (currentLevel >= _maxLevel)
         {
-            Debug.Log("最大レベルに達しました！");
+            Debug.Log($"最大レベルに達しました！{_player.PlayerStatusXp.Level}");
             return;
         }
 
@@ -44,6 +44,10 @@ public class LevelUpManager : MonoBehaviour
 
         // 次のレベルアップまでの必要経験値を増やす
         _experienceNeeded += _experienceIncreasePerLevel;
+        
+        // 経験値を0にリセット
+        _experience = 0;
+        _player.PlayerStatusXp.Experience = 0;
     }
 
     public async UniTask LevelUp()
@@ -76,7 +80,7 @@ public class LevelUpManager : MonoBehaviour
         {
             GainExperience(10);
             Debug.Log($"レベル{_player.PlayerStatusXp.Level}");
-            Debug.Log($"経験値{_player.PlayerStatusXp.Experience}");
+            Debug.Log($"経験値{_player.PlayerStatusXp.Experience},{_experience}");
         }
     }
 }

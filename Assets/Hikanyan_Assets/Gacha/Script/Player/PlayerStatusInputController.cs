@@ -19,13 +19,13 @@ public class PlayerStatusInputController
     
     public Vector2 Move{get => _move;set => _move = value; }
     public Vector2 Look{get => _look;set => _look = value; }
-    private void Start()
+    public void Start()
     {
         _playerInput = new RunGameControllerinputactions();
         _playerInput.Enable();
     }
 
-    void Update()
+    public void Update()
     {
         //アクションからコントローラの入力値を取得
         _move = _playerInput.Player.Move.ReadValue<Vector2>();
