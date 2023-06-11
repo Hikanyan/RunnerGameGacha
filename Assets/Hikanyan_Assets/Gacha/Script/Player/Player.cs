@@ -9,13 +9,23 @@ using UnityEngine.Serialization;
 public partial class Player : MonoBehaviour
 {
     private StateMachine<Player> _stateMachine;
-    private PlayerInput _playerInput = default;
-    private InputAction _moveAction, _lookAction, _fireAction,_jumpAction;
+    private RunGameControllerinputactions _playerInput;
     //private List<InputEvent> _inputBuffer = new List<InputEvent>();
 
     [SerializeField] private Transform[] _lanesPos = new Transform[3];
     private int _laneIndex = 1;
     private Rigidbody _rigidbody;
+    private Vector2 _move, _look;
+    private Vector2 _moveStop, _lookStop;
+    
+    private bool _fire;
+    private bool _isInputEnabled = true;
+    [SerializeField] float _inputDisableTime = 0.5f;
+
+    private int _level;
+    private int _experience;
+    public int Level { get { return _level; } set { _level = value; } }
+    public int Experience { get { return _experience; } set { _experience = value; } }
     enum Event : int
     {
         Idle,
@@ -26,23 +36,15 @@ public partial class Player : MonoBehaviour
 
     private void Start()
     {
+        _playerInput = new RunGameControllerinputactions();
+        _playerInput.Enable();
         TryGetComponent(out _rigidbody);
-        TryGetComponent(out _playerInput);
-        
         Initialize();
+        Walk();
     }
 
     private void Initialize()
     {
-        // InputSystemの設定
-        var actionMap = _playerInput.currentActionMap;
-        //アクションマップからアクションを取得
-        _moveAction = actionMap["Move"];
-        _lookAction = actionMap["Look"];
-        _fireAction = actionMap["Fire"];
-        _jumpAction = actionMap["Jump"];
-
-        _moveAction.started += OnMovementPerformed;
         //ステートマシンの設定
         _stateMachine = new StateMachine<Player>(this);
         // ステートの追加
@@ -78,10 +80,11 @@ public partial class Player : MonoBehaviour
         _stateMachine.Update();
     
         //アクションからコントローラの入力値を取得
-        Vector2 move = _moveAction.ReadValue<Vector2>();
-        Vector2 look = _lookAction.ReadValue<Vector2>();
-        bool fire = _fireAction.triggered;
+        _move = _playerInput.Player.Move.ReadValue<Vector2>();
+        _look = _playerInput.Player.Look.ReadValue<Vector2>();
+        _fire = _playerInput.Player.Fire.triggered;
 
+        Debug.Log(_move);
         // バッファの内容を処理
         //ProcessInputBuffer();
     }
@@ -109,10 +112,4 @@ public partial class Player : MonoBehaviour
     //         _stateMachine.Dispatch((int)inputEvent.EventType);
     //     }
     // }
-    
-    private void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        // 移動アクションの処理
-        Walk();
-    }
 }
