@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Hikanyan_Assets/Scenes/GameScene/BootScene.unity
+    guid: e97244780476ada40aacfa3a4b841ba8
+  - enabled: 1
     path: Assets/Hikanyan_Assets/Scenes/GameScene/TitleScene.unity
     guid: 2c57905848ab3684cab5c1a38ad3a1dc
   - enabled: 1
@@ -18,4 +21,5 @@ EditorBuildSettings:
     path: Assets/Hikanyan_Assets/Scenes/GameScene/GachaScene.unity
     guid: 6196c5532a41e2e4c9f3b33592f1ee99
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 225d6d3d402f31743bce8501c940262b, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 38d9a75c336bcf042a6d8d4168f9aa5c, type: 2}
