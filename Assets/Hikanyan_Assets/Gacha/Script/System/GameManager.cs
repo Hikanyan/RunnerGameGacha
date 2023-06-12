@@ -70,6 +70,7 @@ public class GameManager : AbstractSingleton<GameManager>
         protected override async void OnEnter(State prevState)
         {
             // タイトルステートに入った時の処理
+            await SequenceManager.Instance.LoadScene("TitleScene");
             await GameManager.Instance._uiManager.OpenUI<TitleUI>();
         }
 

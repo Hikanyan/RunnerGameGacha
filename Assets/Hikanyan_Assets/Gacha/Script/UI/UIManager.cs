@@ -7,16 +7,14 @@ using DG.Tweening;
 public class UIManager : AbstractSingleton<UIManager>
 {
     public GameObject uiPrefab; // UIのプレハブ
-    private Transform uiParent; // UIを配置する親オブジェクトの参照
     private Dictionary<string, GameObject> uiDictionary; // UIのインスタンスを管理する辞書
 
     protected override void OnAwake()
     {
-        uiParent = GameObject.Find("UIParent").transform; // UIを配置する親オブジェクトの名前を設定してください
         uiDictionary = new Dictionary<string, GameObject>(); // UIのインスタンスを格納する辞書を初期化
 
         // UIプレハブをインスタンス化し、各UIを表示する
-        GameObject uiObject = Instantiate(uiPrefab, uiParent);
+        GameObject uiObject = Instantiate(uiPrefab);
         uiObject.name = uiPrefab.name;
 
         // 各UIを取得して表示
@@ -24,7 +22,7 @@ public class UIManager : AbstractSingleton<UIManager>
         {
             string uiName = child.gameObject.name;
             uiDictionary.Add(uiName, child.gameObject);
-            child.gameObject.SetActive(true);
+            child.gameObject.SetActive(false);
         }
     }
 
@@ -65,7 +63,7 @@ public class UIManager : AbstractSingleton<UIManager>
     {
         GameObject uiObject = (GameObject)await Resources.LoadAsync(uiName).ToUniTask(); // UIのプレハブを非同期にロード
 
-        uiObject = Instantiate(uiObject, uiParent); // プレハブからインスタンスを生成し、親オブジェクトの下に配置
+        uiObject = Instantiate(uiObject); // プレハブからインスタンスを生成し、親オブジェクトの下に配置
         uiObject.name = uiName; // UIの名前を設定
 
         await uiObject.transform.DOScale(Vector3.zero, 0f).From().SetEase(Ease.OutBack).AsyncWaitForCompletion();
