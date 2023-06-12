@@ -8,7 +8,7 @@ using State = StateMachine<GameManager>.State;
 
 public class GameManager : AbstractSingleton<GameManager>
 {
-    private StateMachine<GameManager> _stateMachine;
+    public StateMachine<GameManager> _stateMachine;
     private ScoreManager _scoreManager= new ScoreManager();
     private TimerManager _timerManager= new TimerManager();
     private UIManager _uiManager;
