@@ -8,15 +8,13 @@ using State = StateMachine<GameManager>.State;
 public class GameManager : AbstractSingleton<GameManager>
 {
     private StateMachine<GameManager> stateMachine;
-    private ScoreManager scoreManager;
-    private TimerManager timerManager;
-
+    private ScoreManager scoreManager= new ScoreManager();
+    private TimerManager timerManager= new TimerManager();
+    private UIManager uiManager;
     private void Start()
     {
         stateMachine = new StateMachine<GameManager>(this);
-        scoreManager = new ScoreManager();
-        timerManager = new TimerManager();
-
+        uiManager = UIManager.Instance;
         // ステートの追加
         var titleState = stateMachine.Add<TitleState>();
         var gameStartState = stateMachine.Add<GameStartState>();
@@ -24,16 +22,19 @@ public class GameManager : AbstractSingleton<GameManager>
         var gameOverState = stateMachine.Add<GameOverState>();
         var resultState = stateMachine.Add<ResultState>();
         var explanationState = stateMachine.Add<ExplanationState>();
+        var gachaState = stateMachine.Add<GachaState>();
 
         // 遷移の定義
         stateMachine.AddTransition<TitleState, GameStartState>((int)GameState.GameStart);
-        stateMachine.AddTransition<GameStartState, GameClearState>((int)GameState.GameClear);
-        stateMachine.AddTransition<GameStartState, GameOverState>((int)GameState.GameOver);
+        stateMachine.AddTransition<GameStartState, GachaState>((int)GameState.Gacha);
+        stateMachine.AddTransition<GachaState, GameClearState>((int)GameState.GameClear);
+        stateMachine.AddTransition<GachaState, GameOverState>((int)GameState.GameOver);
         stateMachine.AddTransition<GameClearState, ResultState>((int)GameState.Result);
         stateMachine.AddTransition<GameOverState, ResultState>((int)GameState.Result);
         stateMachine.AddTransition<ResultState, TitleState>((int)GameState.Title);
         stateMachine.AddTransition<TitleState, ExplanationState>((int)GameState.Explanation);
         stateMachine.AddTransition<ExplanationState, TitleState>((int)GameState.Title);
+
 
         // ステートマシンの実行を開始
         stateMachine.Start<TitleState>();
@@ -64,11 +65,12 @@ public class GameManager : AbstractSingleton<GameManager>
         timerManager.ResetTimer();
     }
 
-    private class TitleState : StateMachine<GameManager>.State
+    private class TitleState : State
     {
         protected override void OnEnter(State prevState)
         {
             // タイトルステートに入った時の処理
+            
         }
 
         protected override void OnUpdate()
@@ -79,14 +81,16 @@ public class GameManager : AbstractSingleton<GameManager>
         protected override void OnExit(State nextState)
         {
             // タイトルステートから出た時の処理
+            
         }
     }
 
-    private class GameStartState : StateMachine<GameManager>.State
+    private class GameStartState : State
     {
         protected override void OnEnter(State prevState)
         {
             // ゲーム開始ステートに入った時の処理
+            
         }
 
         protected override void OnUpdate()
@@ -100,7 +104,7 @@ public class GameManager : AbstractSingleton<GameManager>
         }
     }
 
-    private class GameClearState : StateMachine<GameManager>.State
+    private class GameClearState : State
     {
         protected override void OnEnter(State prevState)
         {
@@ -118,7 +122,7 @@ public class GameManager : AbstractSingleton<GameManager>
         }
     }
 
-    private class GameOverState : StateMachine<GameManager>.State
+    private class GameOverState : State
     {
         protected override void OnEnter(State prevState)
         {
@@ -136,7 +140,7 @@ public class GameManager : AbstractSingleton<GameManager>
         }
     }
 
-    private class ResultState : StateMachine<GameManager>.State
+    private class ResultState : State
     {
         protected override void OnEnter(State prevState)
         {
@@ -154,7 +158,7 @@ public class GameManager : AbstractSingleton<GameManager>
         }
     }
 
-    private class ExplanationState : StateMachine<GameManager>.State
+    private class ExplanationState : State
     {
         protected override void OnEnter(State prevState)
         {
@@ -171,4 +175,22 @@ public class GameManager : AbstractSingleton<GameManager>
             // 説明ステートから出た時の処理
         }
     }
+    private class GachaState :State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            // ガチャステートに入った時の処理
+        }
+
+        protected override void OnUpdate()
+        {
+            // ガチャステートの更新処理
+        }
+
+        protected override void OnExit(State nextState)
+        {
+            // ガチャステートから出た時の処理
+        }
+    }
+
 }

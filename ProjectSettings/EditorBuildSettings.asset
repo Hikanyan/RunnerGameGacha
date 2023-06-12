@@ -4,6 +4,18 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Hikanyan_Assets/Scenes/GameScene/TitleScene.unity
+    guid: 2c57905848ab3684cab5c1a38ad3a1dc
+  - enabled: 1
+    path: Assets/Hikanyan_Assets/Scenes/GameScene/GameScene.unity
+    guid: f96a9cab10e74434db29cfb7b00ff03c
+  - enabled: 1
+    path: Assets/Hikanyan_Assets/Scenes/GameScene/ResultScene.unity
+    guid: 3866a03543961f645be54875fbe4462e
+  - enabled: 1
+    path: Assets/Hikanyan_Assets/Scenes/GameScene/GachaScene.unity
+    guid: 6196c5532a41e2e4c9f3b33592f1ee99
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 38d9a75c336bcf042a6d8d4168f9aa5c, type: 2}
