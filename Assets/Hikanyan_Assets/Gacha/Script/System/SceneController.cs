@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController
@@ -7,8 +8,10 @@ public class SceneController
     private Scene _lastScene;
     private readonly Scene _neverUnloadScene;
 
+    //このコンストラクタは、SceneControllerオブジェクトを作成する際に呼び出される特殊なメソッドです。
     public SceneController(Scene neverUnloadScene)
     {
+        //Debug.Log(neverUnloadScene.name);
         _neverUnloadScene = neverUnloadScene;
         _lastScene = _neverUnloadScene;
     }
@@ -32,7 +35,7 @@ public class SceneController
 
         await UnloadLastScene();
 
-        await LoadNewSceneAdditive(scene);
+        LoadNewSceneAdditive(scene);
     }
 
     // シーンを非同期でアンロードします。
@@ -48,26 +51,27 @@ public class SceneController
     }
 
     // シーンを非同期で追加ロードします。
-    private async UniTask LoadSceneAdditive(string scenePath)
+    private async UniTask LoadSceneAdditive(string scene)
     {
-        var asyncLoad = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+        var asyncLoad = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
         await asyncLoad;
 
-        _lastScene = SceneManager.GetSceneByPath(scenePath);
+        _lastScene = SceneManager.GetSceneByName(scene);
         SceneManager.SetActiveScene(_lastScene);
+
+        // シーンが完全に読み込まれるまで待機する
+        while (!_lastScene.isLoaded)
+        {
+            await UniTask.Yield();
+        }
     }
 
     // 新しいシーンを追加ロードします。
-    private async UniTask LoadNewSceneAdditive(string sceneName)
+    private void LoadNewSceneAdditive(string sceneName)
     {
-        var asyncUnload = SceneManager.UnloadSceneAsync(_lastScene);
-        await asyncUnload;
-
-        var asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        await asyncLoad;
-
-        _lastScene = SceneManager.GetSceneByName(sceneName);
-        SceneManager.SetActiveScene(_lastScene);
+        var scene = SceneManager.CreateScene(sceneName);
+        SceneManager.SetActiveScene(scene);
+        _lastScene = scene;
     }
 
     // 最後にロードされたシーンを非同期でアンロードします。

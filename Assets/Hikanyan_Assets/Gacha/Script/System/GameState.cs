@@ -7,4 +7,5 @@ public enum GameState
     GameOver,
     Result,
     Explanation,
+    Gacha
 }

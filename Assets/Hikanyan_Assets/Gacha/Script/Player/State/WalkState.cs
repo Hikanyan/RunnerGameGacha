@@ -20,9 +20,9 @@ public partial class Player
         protected override void OnUpdate()
         {
             Player player = StateMachine.Owner;
-            if (player._isInputEnabled)
+            if (player.InputController.IsInputEnabled)
             {
-                player._laneIndex += (int)player._move.x;
+                player._laneIndex += (int)player.InputController.Move.x;
 
                 if (player._laneIndex < 0) { player._laneIndex = 0; }
                 if (player._laneIndex > 2) { player._laneIndex = 2; }
@@ -38,9 +38,9 @@ public partial class Player
         private async UniTaskVoid DisableInputForDelay()
         {
             Player player = StateMachine.Owner;
-            player._isInputEnabled = false;
-            await UniTask.Delay((int)(player._inputDisableTime * 1000));
-            player._isInputEnabled = true;
+            player.InputController.IsInputEnabled = false;
+            await UniTask.Delay((int)(player.InputController.InputDisableTime * 1000));
+            player.InputController.IsInputEnabled = true;
         }
     }
 }

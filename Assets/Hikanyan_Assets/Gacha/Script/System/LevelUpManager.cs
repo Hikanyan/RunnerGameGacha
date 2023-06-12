@@ -15,15 +15,16 @@ public class LevelUpManager : MonoBehaviour
     [SerializeField] Player _player;
     [SerializeField] UnityEvent<int> _onLevelUp;
 
-    [SerializeField] int _experience;
-    [SerializeField] int _experienceNeeded;
+    private int _experience;
+    private int _experienceNeeded;
+
     private async UniTask LevelUpRoutine()
     {
-        int currentLevel = _player.Level;
+        int currentLevel = _player.PlayerStatusXp.Level;
 
         if (currentLevel >= _maxLevel)
         {
-            Debug.Log("最大レベルに達しました！");
+            Debug.Log($"最大レベルに達しました！{_player.PlayerStatusXp.Level}");
             return;
         }
 
@@ -32,26 +33,32 @@ public class LevelUpManager : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(_levelUpDuration));
 
         // プレイヤーレベルを上げる
-        _player.Level++;
-        _onLevelUp.Invoke(_player.Level);
+        _player.PlayerStatusXp.Level++;
+        _onLevelUp.Invoke(_player.PlayerStatusXp.Level);
 
         // レベルアップエフェクトを削除
         Destroy(levelUpEffect);
 
         // DoTweenを使用してレベルアップアニメーションを再生
         _player.transform.DOPunchScale(new Vector3(1.2f, 1.2f, 1.2f), _levelUpDuration, 1, 0.5f);
-        
+
         // 次のレベルアップまでの必要経験値を増やす
         _experienceNeeded += _experienceIncreasePerLevel;
+        
+        // 経験値を0にリセット
+        _experience = 0;
+        _player.PlayerStatusXp.Experience = 0;
     }
 
     public async UniTask LevelUp()
     {
         await LevelUpRoutine();
     }
+
     public void GainExperience(int amount)
     {
-        _experience += amount;
+        _player.PlayerStatusXp.Experience += amount;
+        _experience = _player.PlayerStatusXp.Experience;
 
         if (_experience >= _experienceNeeded)
         {
@@ -59,19 +66,21 @@ public class LevelUpManager : MonoBehaviour
             LevelUp().Forget();
         }
     }
+
     private void Start()
     {
         _experienceNeeded = _initialExperienceNeeded;
+        _experience = _player.PlayerStatusXp.Experience;
     }
-    //Debug用
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-    //         GainExperience(10);
-    //         
-    //         Debug.Log($"レベル{player.Level}");
-    //         Debug.Log($"経験値{experience}");
-    //     }
-    // }
+
+    // Debug用
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GainExperience(10);
+            Debug.Log($"レベル{_player.PlayerStatusXp.Level}");
+            Debug.Log($"経験値{_player.PlayerStatusXp.Experience},{_experience}");
+        }
+    }
 }
