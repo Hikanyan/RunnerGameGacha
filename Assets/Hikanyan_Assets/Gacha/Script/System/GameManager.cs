@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,15 +16,7 @@ public class GameManager : AbstractSingleton<GameManager>
     {
         _stateMachine = new StateMachine<GameManager>(this);
         _uiManager = UIManager.Instance;
-        // ステートの追加
-        var titleState = _stateMachine.Add<TitleState>();
-        var gameStartState = _stateMachine.Add<GameStartState>();
-        var gameClearState = _stateMachine.Add<GameClearState>();
-        var gameOverState = _stateMachine.Add<GameOverState>();
-        var resultState = _stateMachine.Add<ResultState>();
-        var explanationState = _stateMachine.Add<ExplanationState>();
-        var gachaState = _stateMachine.Add<GachaState>();
-
+        
         // 遷移の定義
         _stateMachine.AddTransition<TitleState, GameStartState>((int)GameState.GameStart);
         _stateMachine.AddTransition<GameStartState, GachaState>((int)GameState.Gacha);
@@ -34,10 +27,15 @@ public class GameManager : AbstractSingleton<GameManager>
         _stateMachine.AddTransition<ResultState, TitleState>((int)GameState.Title);
         _stateMachine.AddTransition<TitleState, ExplanationState>((int)GameState.Explanation);
         _stateMachine.AddTransition<ExplanationState, TitleState>((int)GameState.Title);
-
-
+        
         // ステートマシンの実行を開始
         _stateMachine.Start<TitleState>();
+    }
+
+    private void Update()
+    {
+        _stateMachine.Update();
+        
     }
 
     public void AddScore(int points)
