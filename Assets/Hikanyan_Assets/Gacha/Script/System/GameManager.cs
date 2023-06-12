@@ -7,70 +7,70 @@ using State = StateMachine<GameManager>.State;
 
 public class GameManager : AbstractSingleton<GameManager>
 {
-    private StateMachine<GameManager> stateMachine;
-    private ScoreManager scoreManager= new ScoreManager();
-    private TimerManager timerManager= new TimerManager();
-    private UIManager uiManager;
+    private StateMachine<GameManager> _stateMachine;
+    private ScoreManager _scoreManager= new ScoreManager();
+    private TimerManager _timerManager= new TimerManager();
+    private UIManager _uiManager;
     private void Start()
     {
-        stateMachine = new StateMachine<GameManager>(this);
-        uiManager = UIManager.Instance;
+        _stateMachine = new StateMachine<GameManager>(this);
+        _uiManager = UIManager.Instance;
         // ステートの追加
-        var titleState = stateMachine.Add<TitleState>();
-        var gameStartState = stateMachine.Add<GameStartState>();
-        var gameClearState = stateMachine.Add<GameClearState>();
-        var gameOverState = stateMachine.Add<GameOverState>();
-        var resultState = stateMachine.Add<ResultState>();
-        var explanationState = stateMachine.Add<ExplanationState>();
-        var gachaState = stateMachine.Add<GachaState>();
+        var titleState = _stateMachine.Add<TitleState>();
+        var gameStartState = _stateMachine.Add<GameStartState>();
+        var gameClearState = _stateMachine.Add<GameClearState>();
+        var gameOverState = _stateMachine.Add<GameOverState>();
+        var resultState = _stateMachine.Add<ResultState>();
+        var explanationState = _stateMachine.Add<ExplanationState>();
+        var gachaState = _stateMachine.Add<GachaState>();
 
         // 遷移の定義
-        stateMachine.AddTransition<TitleState, GameStartState>((int)GameState.GameStart);
-        stateMachine.AddTransition<GameStartState, GachaState>((int)GameState.Gacha);
-        stateMachine.AddTransition<GachaState, GameClearState>((int)GameState.GameClear);
-        stateMachine.AddTransition<GachaState, GameOverState>((int)GameState.GameOver);
-        stateMachine.AddTransition<GameClearState, ResultState>((int)GameState.Result);
-        stateMachine.AddTransition<GameOverState, ResultState>((int)GameState.Result);
-        stateMachine.AddTransition<ResultState, TitleState>((int)GameState.Title);
-        stateMachine.AddTransition<TitleState, ExplanationState>((int)GameState.Explanation);
-        stateMachine.AddTransition<ExplanationState, TitleState>((int)GameState.Title);
+        _stateMachine.AddTransition<TitleState, GameStartState>((int)GameState.GameStart);
+        _stateMachine.AddTransition<GameStartState, GachaState>((int)GameState.Gacha);
+        _stateMachine.AddTransition<GachaState, GameClearState>((int)GameState.GameClear);
+        _stateMachine.AddTransition<GachaState, GameOverState>((int)GameState.GameOver);
+        _stateMachine.AddTransition<GameClearState, ResultState>((int)GameState.Result);
+        _stateMachine.AddTransition<GameOverState, ResultState>((int)GameState.Result);
+        _stateMachine.AddTransition<ResultState, TitleState>((int)GameState.Title);
+        _stateMachine.AddTransition<TitleState, ExplanationState>((int)GameState.Explanation);
+        _stateMachine.AddTransition<ExplanationState, TitleState>((int)GameState.Title);
 
 
         // ステートマシンの実行を開始
-        stateMachine.Start<TitleState>();
+        _stateMachine.Start<TitleState>();
     }
 
     public void AddScore(int points)
     {
-        scoreManager.AddScore(points);
+        _scoreManager.AddScore(points);
     }
 
     public void ResetScore()
     {
-        scoreManager.ResetScore();
+        _scoreManager.ResetScore();
     }
 
     public async UniTask StartTimer(float duration)
     {
-        await timerManager.StartTimer(duration);
+        await _timerManager.StartTimer(duration);
     }
 
     public void StopTimer()
     {
-        timerManager.StopTimer();
+        _timerManager.StopTimer();
     }
 
     public void ResetTimer()
     {
-        timerManager.ResetTimer();
+        _timerManager.ResetTimer();
     }
 
     private class TitleState : State
     {
-        protected override void OnEnter(State prevState)
+        protected override async void OnEnter(State prevState)
         {
             // タイトルステートに入った時の処理
-            
+            await GameManager.Instance._uiManager.OpenUI<TitleUI>();
         }
 
         protected override void OnUpdate()
