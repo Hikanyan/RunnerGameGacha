@@ -1,5 +1,6 @@
+using System;
 using UniRx;
-
+[Serializable]
 public class ScoreManager
 {
     private IntReactiveProperty _score = new IntReactiveProperty(0);

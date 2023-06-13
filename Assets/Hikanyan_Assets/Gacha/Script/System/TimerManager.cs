@@ -1,7 +1,9 @@
+using System;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+[Serializable]
 public class TimerManager
 {
     private FloatReactiveProperty _timer = new FloatReactiveProperty(0f);

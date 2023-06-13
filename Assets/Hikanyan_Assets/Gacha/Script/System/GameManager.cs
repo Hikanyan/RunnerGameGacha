@@ -5,18 +5,19 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using State = StateMachine<GameManager>.State;
-
+[Serializable]
 public class GameManager : AbstractSingleton<GameManager>
 {
     public StateMachine<GameManager> _stateMachine;
-    private ScoreManager _scoreManager= new ScoreManager();
-    private TimerManager _timerManager= new TimerManager();
-    private UIManager _uiManager;
+    [SerializeField] ScoreManager _scoreManager = new ScoreManager();
+    [SerializeField] TimerManager _timerManager = new TimerManager();
+    [SerializeField] InGameManager _inGameManager = new InGameManager();
+    UIManager _uiManager;
+    
     private void Start()
     {
         _stateMachine = new StateMachine<GameManager>(this);
         _uiManager = UIManager.Instance;
-        
         // 遷移の定義
         _stateMachine.AddTransition<TitleState, GameStartState>((int)GameState.GameStart);
         _stateMachine.AddTransition<GameStartState, GachaState>((int)GameState.Gacha);
@@ -34,8 +35,7 @@ public class GameManager : AbstractSingleton<GameManager>
 
     private void Update()
     {
-        _stateMachine.Update();
-        
+        Debug.Log(_stateMachine.CurrentState);
     }
 
     public void AddScore(int points)
@@ -77,19 +77,21 @@ public class GameManager : AbstractSingleton<GameManager>
             // タイトルステートの更新処理
         }
 
-        protected override void OnExit(State nextState)
+        protected override async void OnExit(State nextState)
         {
             // タイトルステートから出た時の処理
-            
+            GameManager.Instance._uiManager.CloseUI<TitleUI>();
         }
     }
 
     private class GameStartState : State
     {
-        protected override void OnEnter(State prevState)
+        protected override async void OnEnter(State prevState)
         {
             // ゲーム開始ステートに入った時の処理
-            
+            await SequenceManager.Instance.LoadScene("GameScene");
+            await GameManager.Instance._uiManager.OpenUI<GameUI>();
+            GameManager.Instance._inGameManager.Start();
         }
 
         protected override void OnUpdate()
@@ -100,6 +102,7 @@ public class GameManager : AbstractSingleton<GameManager>
         protected override void OnExit(State nextState)
         {
             // ゲーム開始ステートから出た時の処理
+            GameManager.Instance._uiManager.CloseUI<GameUI>();
         }
     }
 
