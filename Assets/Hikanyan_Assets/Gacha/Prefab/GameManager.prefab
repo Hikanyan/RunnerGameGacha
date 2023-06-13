@@ -44,3 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c535cb7bdf0e6148af6ce480097add8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inGameManager:
+    _loadObject:
+    - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
+    - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
+    - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
+    _pointObject: []
+    _loadLength: 30
+    _loadSpacing: -23.31469
+    _addPoint: 0
+    _timer: 0
