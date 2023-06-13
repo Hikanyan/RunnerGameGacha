@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine.Serialization;
-
+[Serializable]
 public class LevelUpManager : MonoBehaviour
 {
     [SerializeField] int _maxLevel = 10;
@@ -67,20 +67,20 @@ public class LevelUpManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void Start()
     {
         _experienceNeeded = _initialExperienceNeeded;
         _experience = _player.PlayerStatusXp.Experience;
     }
 
     // Debug用
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GainExperience(10);
-            Debug.Log($"レベル{_player.PlayerStatusXp.Level}");
-            Debug.Log($"経験値{_player.PlayerStatusXp.Experience},{_experience}");
-        }
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         GainExperience(10);
+    //         Debug.Log($"レベル{_player.PlayerStatusXp.Level}");
+    //         Debug.Log($"経験値{_player.PlayerStatusXp.Experience},{_experience}");
+    //     }
+    // }
 }

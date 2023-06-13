@@ -12,6 +12,7 @@ public class GameManager : AbstractSingleton<GameManager>
     [SerializeField] ScoreManager _scoreManager = new ScoreManager();
     [SerializeField] TimerManager _timerManager = new TimerManager();
     [SerializeField] InGameManager _inGameManager = new InGameManager();
+    [SerializeField] LevelUpManager _levelUpManager = new LevelUpManager();
     UIManager _uiManager;
     
     private void Start()
@@ -48,6 +49,16 @@ public class GameManager : AbstractSingleton<GameManager>
         _scoreManager.ResetScore();
     }
 
+    public void AddCoin(int amount)
+    {
+        _scoreManager.AddCoin(amount);
+    }
+
+    public void ResetCoin()
+    {
+        _scoreManager.ResetCoin();
+    }
+
     public async UniTask StartTimer(float duration)
     {
         await _timerManager.StartTimer(duration);
@@ -61,6 +72,11 @@ public class GameManager : AbstractSingleton<GameManager>
     public void ResetTimer()
     {
         _timerManager.ResetTimer();
+    }
+
+    public void GainExperience(int amount)
+    {
+        _levelUpManager.GainExperience(amount);
     }
 
     private class TitleState : State
@@ -92,6 +108,7 @@ public class GameManager : AbstractSingleton<GameManager>
             await SequenceManager.Instance.LoadScene("GameScene");
             await GameManager.Instance._uiManager.OpenUI<GameUI>();
             GameManager.Instance._inGameManager.Start();
+            GameManager.Instance._levelUpManager.Start();
         }
 
         protected override void OnUpdate()
