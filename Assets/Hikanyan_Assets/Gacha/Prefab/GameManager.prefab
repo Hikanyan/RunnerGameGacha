@@ -50,10 +50,16 @@ MonoBehaviour:
     - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
     - {fileID: 4504047652931116799, guid: 8acd9741f0d48a1459a185e93f9b0455, type: 3}
     - {fileID: 5155517052409117644, guid: d6148180ba73de24997903c4a600ed50, type: 3}
+    - {fileID: 2331494360781504086, guid: 6b7a8f24ec116dc48adfecce2c9f1e10, type: 3}
+    - {fileID: 8485890194612468336, guid: dfb76d178db3a8645ad5560cb5aa331b, type: 3}
+    - {fileID: 7645043503841112338, guid: f5b5005d0ed2a014da42bb79336f4571, type: 3}
     _itemObject:
     - {fileID: 8700138316514034039, guid: de35db7a2654f9540b2b5c564c0606ed, type: 3}
     - {fileID: 5225118903144739720, guid: 558f4fa1d60909f44987f65822c57262, type: 3}
     - {fileID: 4602896203274726172, guid: c5fd759de861f2a46af80cecefe1a1fa, type: 3}
+    _special:
+    - {fileID: 6691420960022087985, guid: 86e78137e86c84743a101693f2139b35, type: 3}
+    - {fileID: 9112286768107319358, guid: ad4f2f6a4e964a4408533c37e04f0b05, type: 3}
     _loadLength: 100
     _loadSpacing: -23.31469
     _itemLength: 100
