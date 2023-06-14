@@ -18,11 +18,9 @@ public class InGameManager
     [SerializeField] private int _itemLength = 30;
     [SerializeField] private float _itemMinSpacing = 5f;
     [SerializeField] private float _itemMaxSpacing = 20f;
-    [SerializeField] private int _addPoint;
-    [SerializeField] private float _timer;
 
 
-    public void Start()
+    public void InGameRunStart()
     {
         List<GameObject> selectedObjects = new List<GameObject>();
         for (int i = 0; i < _loadLength; i++)
@@ -33,7 +31,7 @@ public class InGameManager
 
         for (int i = 0; i < _loadLength; i++)
         {
-            Vector3 loadPos = new Vector3(0f, 0f, i * _loadSpacing);
+            Vector3 loadPos = new Vector3(0f, 9f, i * _loadSpacing);
             Vector3 loadRot = new Vector3(-90f, 0f, 90);
             UnityEngine.Object.Instantiate(selectedObjects[i], loadPos, Quaternion.Euler(loadRot));
         }
@@ -60,5 +58,10 @@ public class InGameManager
             Vector3 loadRot = new Vector3(0f, 0f, 0f);
             UnityEngine.Object.Instantiate(itemObjects[i], loadPos, Quaternion.Euler(loadRot));
         }
+    }
+
+    public void Result()
+    {
+        
     }
 }

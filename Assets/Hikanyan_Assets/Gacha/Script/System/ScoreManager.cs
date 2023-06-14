@@ -9,6 +9,8 @@ public class ScoreManager
 
     private IntReactiveProperty _coin = new IntReactiveProperty(0);
     public IReadOnlyReactiveProperty<int> Coin => _coin;
+    
+
 
     public void AddScore(int points)
     {
@@ -19,7 +21,7 @@ public class ScoreManager
     {
         _score.Value = 0;
     }
-
+    
     public void AddCoin(int amount)
     {
         _coin.Value += amount;

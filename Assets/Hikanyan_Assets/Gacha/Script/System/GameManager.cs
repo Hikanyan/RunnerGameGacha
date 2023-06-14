@@ -15,6 +15,8 @@ public class GameManager : AbstractSingleton<GameManager>
     [SerializeField] LevelUpManager _levelUpManager = new LevelUpManager();
     UIManager _uiManager;
     
+    public ScoreManager ScoreManager => _scoreManager;
+    public LevelUpManager LevelUpManager => _levelUpManager;
     private void Start()
     {
         _stateMachine = new StateMachine<GameManager>(this);
@@ -37,6 +39,11 @@ public class GameManager : AbstractSingleton<GameManager>
     private void Update()
     {
         Debug.Log(_stateMachine.CurrentState);
+    }
+
+    public void AddExperiencePoint(int amount)
+    {
+        _levelUpManager.GainExperience(amount);
     }
 
     public void AddScore(int points)
@@ -74,11 +81,6 @@ public class GameManager : AbstractSingleton<GameManager>
         _timerManager.ResetTimer();
     }
 
-    public void GainExperience(int amount)
-    {
-        _levelUpManager.GainExperience(amount);
-    }
-
     private class TitleState : State
     {
         protected override async void OnEnter(State prevState)
@@ -107,7 +109,7 @@ public class GameManager : AbstractSingleton<GameManager>
             // ゲーム開始ステートに入った時の処理
             await SequenceManager.Instance.LoadScene("GameScene");
             await GameManager.Instance._uiManager.OpenUI<GameUI>();
-            GameManager.Instance._inGameManager.Start();
+            GameManager.Instance._inGameManager.InGameRunStart();
             GameManager.Instance._levelUpManager.Start();
         }
 
