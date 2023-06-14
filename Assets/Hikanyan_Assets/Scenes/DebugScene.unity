@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1089a4fc25b747369d1b5dfe68555d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 5
   _lanesPos:
   - {fileID: 1360350272}
   - {fileID: 1137309493}
