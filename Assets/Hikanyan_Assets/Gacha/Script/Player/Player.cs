@@ -4,17 +4,22 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.Serialization;
-
+enum Event : int
+{
+    Idle,
+    Walk,
+    Jump,
+}
 
 public partial class Player : MonoBehaviour
 {
-    private StateMachine<Player> _stateMachine;
+    public StateMachine<Player> _stateMachine;
 
 
     [SerializeField] private float _speed = 5;
     [SerializeField] private Transform[] _lanesPos = new Transform[3];
     private int _laneIndex = 1;
-    private Rigidbody _rigidbody;
+    public Rigidbody _rigidbody;
 
 
     [SerializeField] private PlayerStatusInputController _inputController = new();
@@ -22,12 +27,7 @@ public partial class Player : MonoBehaviour
     public PlayerStatusInputController InputController => _inputController;
     public PlayerStatusXP PlayerStatusXp => _playerStatusXp;
 
-    enum Event : int
-    {
-        Idle,
-        Walk,
-        Jump,
-    }
+
 
 
     private void Start()

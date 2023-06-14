@@ -45,10 +45,9 @@ public class InGameManager
             if (i == _loadLength - 1 && _special.Length > 1)
             {
                 // 最後の要素がスペシャルのオブジェクトの場合、別の位置を指定
-                Vector3 specialPos = new Vector3(0, 8f, i * _loadSpacing);
+                Vector3 specialPos = new Vector3(0, -1.5f, i * _loadSpacing);
                 Vector3 specialRot = new Vector3(0, 180f, 0f);
-                UnityEngine.Object.Instantiate(selectedObjects[_loadLength - 1], specialPos, Quaternion.Euler(specialRot));
-                Debug.Log(selectedObjects[_loadLength-1]);
+                UnityEngine.Object.Instantiate(selectedObjects[_loadLength+1], specialPos, Quaternion.Euler(specialRot));
             }
             else
             {
