@@ -18,6 +18,7 @@ public abstract class ItemBase:MonoBehaviour
         if (collider.gameObject.CompareTag("Player"))
         {
             Activate();
+            Destroy(this.gameObject);
         }
     }
 }
