@@ -7,6 +7,8 @@ public partial class Player
     {
         protected override void OnEnter(State prevState)
         {
+            Player player =StateMachine.Owner;
+            player._rigidbody.velocity = Vector3.zero;
             Debug.Log("IdleState: Enter");
         }
 

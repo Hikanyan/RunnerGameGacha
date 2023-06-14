@@ -77,6 +77,7 @@ public class LevelUpManager
     public void Start()
     {
         _player = GameObject.FindObjectOfType<Player>();
+        Debug.Log(_player.name);
         _experienceNeeded = _initialExperienceNeeded;
         _experience.Value = _player.PlayerStatusXp.Experience;
         _currentLevel.Value = _player.PlayerStatusXp.Level;

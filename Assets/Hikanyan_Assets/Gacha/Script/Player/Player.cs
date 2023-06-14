@@ -13,7 +13,7 @@ enum Event : int
 
 public partial class Player : MonoBehaviour
 {
-    public StateMachine<Player> _stateMachine;
+    StateMachine<Player> _stateMachine;
 
 
     [SerializeField] private float _speed = 5;
@@ -61,6 +61,11 @@ public partial class Player : MonoBehaviour
         _inputController.Update();
         // ステートの更新
         _stateMachine.Update();
+    }
+
+    public void Idle()
+    {
+        _stateMachine.Dispatch((int)Event.Idle);
     }
 
     public void Walk()

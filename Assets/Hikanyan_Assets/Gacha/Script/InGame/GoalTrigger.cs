@@ -7,7 +7,7 @@ public class GoalTrigger : MonoBehaviour
     {
         if (other.TryGetComponent(out Player player))
         {
-            player._stateMachine.Dispatch((int)Event.Idle);
+            player.Idle();
             GameManager.Instance._stateMachine.Dispatch((int)GameState.Result);
         }
     }

@@ -23,7 +23,7 @@ public class GameManager : AbstractSingleton<GameManager>
         _uiManager = UIManager.Instance;
         // 遷移の定義
         _stateMachine.AddTransition<TitleState, GameStartState>((int)GameState.GameStart);
-        _stateMachine.AddTransition<GameStartState, GachaState>((int)GameState.Gacha);
+        _stateMachine.AddTransition<GameStartState, ResultState>((int)GameState.Result);
         _stateMachine.AddTransition<GachaState, GameClearState>((int)GameState.GameClear);
         _stateMachine.AddTransition<GachaState, GameOverState>((int)GameState.GameOver);
         _stateMachine.AddTransition<GameClearState, ResultState>((int)GameState.Result);
@@ -163,9 +163,10 @@ public class GameManager : AbstractSingleton<GameManager>
 
     private class ResultState : State
     {
-        protected override void OnEnter(State prevState)
+        protected override async void OnEnter(State prevState)
         {
             // リザルトステートに入った時の処理
+            await GameManager.Instance._uiManager.OpenUI<ResultUI>();
         }
 
         protected override void OnUpdate()
@@ -176,6 +177,7 @@ public class GameManager : AbstractSingleton<GameManager>
         protected override void OnExit(State nextState)
         {
             // リザルトステートから出た時の処理
+            GameManager.Instance._uiManager.CloseUI<ResultUI>();
         }
     }
 

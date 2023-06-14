@@ -39,7 +39,7 @@ public class InGameManager
             if (i == 0 && _special.Length > 0 && selectedObjects[0] == _special[0])
             {
                 // 最初の要素がスペシャルのオブジェクトの場合、別の位置を指定
-                Vector3 specialLoadPos = new Vector3(0, 10f, i * _loadSpacing);
+                Vector3 specialLoadPos = new Vector3(0, 8f, i * _loadSpacing);
                 UnityEngine.Object.Instantiate(selectedObjects[0], specialLoadPos, Quaternion.Euler(loadRot));
             }
             if (i == _loadLength - 1 && _special.Length > 1)
@@ -52,7 +52,7 @@ public class InGameManager
             else
             {
                 // 通常の位置を指定
-                Vector3 normalLoadPos = new Vector3(0f, 9f, i * _loadSpacing);
+                Vector3 normalLoadPos = new Vector3(0f, 8f, i * _loadSpacing);
                 UnityEngine.Object.Instantiate(selectedObjects[i], normalLoadPos, Quaternion.Euler(loadRot));
             }
 
@@ -76,7 +76,7 @@ public class InGameManager
         {
             float randomSpacing =UnityEngine.Random.Range(_itemMinSpacing, _itemMaxSpacing);
             int randomIndex = UnityEngine.Random.Range(0, _itemObject.Length);
-            Vector3 loadPos = new Vector3(itemSpawnPoint[randomIndex].position.x, 0f, i * randomSpacing);
+            Vector3 loadPos = new Vector3(itemSpawnPoint[randomIndex].position.x, 1f, i * randomSpacing);
             Vector3 loadRot = new Vector3(0f, 0f, 0f);
             UnityEngine.Object.Instantiate(itemObjects[i], loadPos, Quaternion.Euler(loadRot));
         }
