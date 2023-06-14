@@ -11,6 +11,7 @@ public partial class Player : MonoBehaviour
     private StateMachine<Player> _stateMachine;
 
 
+    [SerializeField] private float _speed = 5;
     [SerializeField] private Transform[] _lanesPos = new Transform[3];
     private int _laneIndex = 1;
     private Rigidbody _rigidbody;
