@@ -33,7 +33,8 @@ public partial class Player
 
                 Debug.Log($"index{player._laneIndex}");
             }
-            player._rigidbody.AddForce(new Vector3(0,0,player._speed));
+            if(player._rigidbody.velocity.magnitude<100 )
+                player._rigidbody.AddForce(new Vector3(0,0,player._speed));
             Debug.Log("WalkState: Update");
         }
         private async UniTaskVoid DisableInputForDelay()

@@ -32,7 +32,7 @@ public class GameUI : UIBase
         }).AddTo(this);
         GameManager.Instance.LevelUpManager.CurrentLevel.Subscribe(level =>
         {
-            _experienceText.text = $"Level:{level.ToString()}";
+            _levelText.text = $"Level:{level.ToString()}";
         }).AddTo(this);
     }
 }
