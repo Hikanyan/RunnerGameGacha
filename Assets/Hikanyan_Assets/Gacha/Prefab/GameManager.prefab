@@ -48,16 +48,24 @@ MonoBehaviour:
     _lanePostion: {fileID: 308736776540627593, guid: 41925fc69a2d9954b935a308109a001c, type: 3}
     _loadObject:
     - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
-    - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
-    - {fileID: 235027574950945024, guid: d618890f0a38e004ab503075fa32ecdc, type: 3}
+    - {fileID: 4504047652931116799, guid: 8acd9741f0d48a1459a185e93f9b0455, type: 3}
+    - {fileID: 5155517052409117644, guid: d6148180ba73de24997903c4a600ed50, type: 3}
     _itemObject:
     - {fileID: 8700138316514034039, guid: de35db7a2654f9540b2b5c564c0606ed, type: 3}
     - {fileID: 5225118903144739720, guid: 558f4fa1d60909f44987f65822c57262, type: 3}
     - {fileID: 4602896203274726172, guid: c5fd759de861f2a46af80cecefe1a1fa, type: 3}
-    _loadLength: 30
+    _loadLength: 100
     _loadSpacing: -23.31469
-    _itemLength: 60
+    _itemLength: 100
     _itemMinSpacing: -5
     _itemMaxSpacing: -30
-    _addPoint: 0
-    _timer: 0
+  _levelUpManager:
+    _maxLevel: 10
+    _levelUpDuration: 1
+    _initialExperienceNeeded: 100
+    _experienceIncreasePerLevel: 50
+    _levelUpEffectPrefab: {fileID: 6099630122560863406, guid: 04caa0dcae77f534da8476e107a04fe8, type: 3}
+    _player: {fileID: 0}
+    _onLevelUp:
+      m_PersistentCalls:
+        m_Calls: []
